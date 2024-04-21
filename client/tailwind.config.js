@@ -6,7 +6,11 @@ export default {
     "./node_modules/flowbite/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        jersey: ['"Jersey 20"', "cursive"],
+      },
+    },
   },
   plugins: [require("flowbite/plugin")],
 };

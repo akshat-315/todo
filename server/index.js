@@ -2,6 +2,7 @@ const express = require("express");
 const userRouter = require("./route/UserRoutes.js");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/ErrorHandler.js");
+const todoRouter = require("./route/TodoRouter.js");
 require("dotenv").config();
 require("./database/db.js")();
 
@@ -16,6 +17,7 @@ app.use(cookieParser());
 
 //Routes
 app.use("/api/user", userRouter);
+app.use("/api/todo", todoRouter);
 
 app.use(errorHandler);
 

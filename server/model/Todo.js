@@ -13,6 +13,7 @@ const todoSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      default: "active",
     },
     isImportant: {
       type: Boolean,

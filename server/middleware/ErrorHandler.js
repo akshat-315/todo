@@ -1,23 +1,13 @@
-class CustomError extends Error {
-  httpStatusCode;
-  timestamp;
-  documentationUrl;
-
-  constructor(httpStatusCode, message, documentationUrl) {
-    if (message) {
-      super(message);
-    } else {
-      super("A generic error occurred!");
-    }
-
-    this.httpStatusCode = httpStatusCode;
-    this.timestamp = new Date().toISOString();
-    this.documentationUrl = documentationUrl;
-
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
-
-module.exports = {
-  CustomHttpError: CustomError,
+const ErrorHandler = (err, req, res, next) => {
+  console.log("Middleware Error Hadnling");
+  const errStatus = err.statusCode || 500;
+  const errMsg = err.message || "Something went wrong";
+  res.status(errStatus).json({
+    success: false,
+    status: errStatus,
+    message: errMsg,
+    stack: process.env.NODE_ENV === "development" ? err.stack : {},
+  });
 };
+
+module.exports = ErrorHandler;

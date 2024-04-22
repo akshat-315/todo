@@ -11,7 +11,7 @@ import PrivateRoutes from "./components/PrivateRoutes";
 const App = () => {
   return (
     <>
-      <Navbar />
+      
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-up" element={<SignUp />} />
@@ -20,7 +20,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
         </Route>
       </Routes>
-      <Footer />
+      
     </>
   );
 };

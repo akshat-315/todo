@@ -4,10 +4,10 @@ const User = require("../model/User.js");
 
 //Creating a user via Sign-Up
 const signUp = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
-    if (!email || !password) {
+    if (!email || !password || !username) {
       res
         .status(400)
         .json({ success: false, message: "Please provide email and password" });
@@ -26,6 +26,7 @@ const signUp = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
+      username,
       email,
       password: hashedPassword,
     });
@@ -80,6 +81,7 @@ const signIn = async (req, res, next) => {
       message: "Login success",
       _id: validUser?._id,
       email: validUser?.email,
+      username: validUser?.username,
     });
   } catch (error) {
     next(error);

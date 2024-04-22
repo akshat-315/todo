@@ -7,7 +7,7 @@ const Home = () => {
   // console.log("My authority: ", user);
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#2D2E2D]">
       <h2>Hiii</h2>
     </div>
   );

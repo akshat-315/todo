@@ -34,7 +34,8 @@ const signUp = async (req, res, next) => {
     if (savedUser) {
       res.status(200).json("Sign-up was successful");
     } else {
-      throw new CustomHttpError(500, "Some error occurred during sign-up");
+      res.status(500).json({ success: false, message: "Some error occurred" });
+      return;
     }
   } catch (error) {
     next(error);
@@ -49,15 +50,19 @@ const signIn = async (req, res, next) => {
     //Checking if user if valid or not
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      res.status(400);
-      throw new Error("Invalid email or password");
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid email or password" });
+      return;
     }
 
     //Matching hashed the password from the database
     const isMatch = await bcrypt.compare(password, validUser.password);
     if (!isMatch) {
-      res.status(400);
-      throw new Error("Invalid email or password");
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid email or password" });
+      return;
     }
 
     //Generating token using jwt
@@ -70,7 +75,7 @@ const signIn = async (req, res, next) => {
 
     console.log("Token: ", token);
     //send the response
-    res.json({
+    res.status(200).json({
       status: "success",
       message: "Login success",
       _id: validUser?._id,
@@ -79,6 +84,24 @@ const signIn = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+const getUser = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.find({ email });
+    if (!user) {
+      res.json(500).json({ success: "false", message: "Invalid user" });
+      return;
+    }
+
+    res.status(200).json({
+      user,
+      success: "true",
+      message: "User found",
+    });
+  } catch (error) {}
 };
 
 module.exports = {

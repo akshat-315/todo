@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, Spinner } from "flowbite-react";
 import tick from "../assets/tick.gif";
+import React from "react";
+import { useAuth } from "../context/AuthContext";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -36,10 +39,14 @@ const SignIn = () => {
         setErrorMessage(data.message);
       }
       setLoading(false);
-      //   console.log(data);
-      //   console.log(errorMessage);
-
+      // console.log(res);
+      const user = {
+        userId: data._id,
+        email: data.email,
+      };
+      // console.log("User:", user);
       if (res.ok) {
+        login(user);
         navigate("/home");
       }
     } catch (error) {

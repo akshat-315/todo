@@ -1,12 +1,56 @@
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Alert, Spinner } from "flowbite-react";
 
 const SignUp = () => {
-  
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  //   console.log(formData);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      return setErrorMessage("Please fill out all fields.");
+    }
+
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch("/api/user/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (data.success === false) {
+        setErrorMessage(data.message);
+      }
+      setLoading(false);
+      //   console.log(data);
+      //   console.log(errorMessage);
+
+      if (res.ok) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage(error.message);
+    }
+  };
 
   return (
-    <div class="flex h-screen bg-[#2D2E2D] py-4 ">
-      <div class="hidden lg:flex items-center justify-center flex-1 bg-[#2D2E2D] text-black">
-        <div class="max-w-md text-center">
+    <div className="flex h-screen bg-[#2D2E2D] py-4 ">
+      <div className="hidden lg:flex items-center justify-center flex-1 bg-[#2D2E2D] text-black">
+        <div className="max-w-md text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="524.67004"
@@ -236,16 +280,16 @@ const SignUp = () => {
           </svg>
         </div>
       </div>
-      <div class="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center rounded-3xl">
-        <div class="max-w-md w-full p-6">
-          <h1 class="text-3xl font-semibold mb-6 text-black text-center">
+      <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center rounded-3xl">
+        <div className="max-w-md w-full p-6">
+          <h1 className="text-3xl font-semibold mb-6 text-black text-center">
             Sign Up
           </h1>
-          <h1 class="text-sm font-semibold mb-6 text-gray-500 text-center">
+          <h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
             Get started with you tasks right away!
           </h1>
-          <div class="mt-4 flex flex-col lg:flex-row items-center justify-between"></div>
-          <form action="#" method="POST" class="space-y-4">
+          <div className="mt-4 flex flex-col lg:flex-row items-center justify-between"></div>
+          <form onSubmit={handleSubmit} method="POST" className="space-y-4">
             <div>
               <label
                 for="email"
@@ -257,13 +301,14 @@ const SignUp = () => {
                 type="text"
                 id="email"
                 name="email"
-                class="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                onChange={handleInputChange}
               />
             </div>
             <div>
               <label
                 for="password"
-                class="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700"
               >
                 Password
               </label>
@@ -271,22 +316,37 @@ const SignUp = () => {
                 type="password"
                 id="password"
                 name="password"
-                class="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
+                onChange={handleInputChange}
               />
             </div>
             <div>
-              <button
-                type="submit"
-                class="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black  focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300 cursor-pointer"
-              >
-                Sign Up
-              </button>
+              <div className="flex flex-col justify-center items-center">
+                {errorMessage && (
+                  <Alert className="" color="failure">
+                    {errorMessage}
+                  </Alert>
+                )}
+                <button
+                  type="submit"
+                  className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black  focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300 cursor-pointer"
+                >
+                  {loading ? (
+                    <>
+                      <Spinner size="sm" />
+                      <span className="pl-3">Loading...</span>
+                    </>
+                  ) : (
+                    "Sign Up"
+                  )}
+                </button>
+              </div>
             </div>
           </form>
-          <div class="mt-4 text-sm text-gray-600 text-center">
+          <div className="mt-4 text-sm text-gray-600 text-center">
             <p className="text-base">
               Already have an account?{" "}
-              <a href="/sign-in" class="text-black hover:underline">
+              <a href="/sign-in" className="text-black hover:underline">
                 Login here
               </a>
             </p>

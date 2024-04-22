@@ -8,15 +8,17 @@ const signUp = async (req, res, next) => {
 
   try {
     if (!email || !password) {
-      res.status(400);
-      throw new Error("Please provide email and password");
+      res
+        .status(400)
+        .json({ success: false, message: "Please provide email and password" });
+      return;
     }
 
     //checking if user already exists or not
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(400);
-      throw new Error("User already exists");
+      res.status(400).json({ success: false, message: "User already exists" });
+      return;
     }
 
     //hashing the password

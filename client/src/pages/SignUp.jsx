@@ -1,6 +1,8 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
 
 const SignUp = () => {
+  
+
   return (
     <div class="flex h-screen bg-[#2D2E2D] py-4 ">
       <div class="hidden lg:flex items-center justify-center flex-1 bg-[#2D2E2D] text-black">

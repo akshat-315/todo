@@ -60,14 +60,12 @@ const SignIn = () => {
       <div className="hidden lg:flex items-center justify-center flex-1 bg-[#2D2E2D] text-black">
         <div className="max-w-md text-center">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
             width="524.67004"
             height="531.39694"
-            class="w-full"
+            className="w-full"
             alt="https://undraw.co/illustrations"
             title="https://undraw.co/illustrations"
             viewBox="0 0 524.67004 531.39694"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
           >
             <polygon
               points="117.67523 88.74385 113.67523 109.74385 133.61763 115.36589 131.1398 92.94604 117.67523 88.74385"
@@ -302,10 +300,7 @@ const SignIn = () => {
           <div className="mt-4 flex flex-col lg:flex-row items-center justify-between"></div>
           <form onSubmit={handleSubmit} method="POST" className="space-y-4">
             <div>
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700"
-              >
+              <label className="block text-sm font-medium text-gray-700">
                 Email
               </label>
               <input
@@ -317,10 +312,7 @@ const SignIn = () => {
               />
             </div>
             <div>
-              <label
-                for="password"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input

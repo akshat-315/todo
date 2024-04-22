@@ -10,7 +10,7 @@ import PrivateRoutes from "./components/PrivateRoutes";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -21,7 +21,7 @@ const App = () => {
         </Route>
       </Routes>
       <Footer />
-    </BrowserRouter>
+    </>
   );
 };
 

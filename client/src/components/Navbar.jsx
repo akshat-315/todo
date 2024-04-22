@@ -1,19 +1,24 @@
-import { Button } from "flowbite-react";
 import { Link } from "react-router-dom";
+import icon from "../assets/icon.png";
 
 const Navbar = () => {
   return (
-    <div className="bg-[#333333] p-4">
-      <div className="flex justify-between">
-        <div>
-          <h2 className="text-[#f73e16]">todo</h2>
+    <div className="bg-[#2D2E2D]">
+      <div className="flex justify-between py-6 px-8">
+        <div className="flex gap-2">
+          <img src={icon} width={26} height={26} />
+          <h2 className="text-[#de483a] text-3xl">todo</h2>
         </div>
-        <div className="flex gap-8">
-          <Link className="cursor-pointer no-underline text-white mt-2">
-            Login
+        <div className="sm:gap-6 flex gap-8">
+          <Link to="sign-in">
+            <button className="bg-transparent border-none text-white rounded-md py-1 cursor-pointer">
+              <div className="px-4 py-1 text-lg text-gray-100">Sign In</div>
+            </button>
           </Link>
-          <Link className="hover:cursor-pointer no-underline">
-            <Button className="bg-[#f73e16]">Get started</Button>
+          <Link to="/sign-up">
+            <button className="bg-[#de483a] border-none text-white rounded-2xl py-1 cursor-pointer">
+              <div className="px-4 py-1 text-base">Get Started</div>
+            </button>
           </Link>
         </div>
       </div>

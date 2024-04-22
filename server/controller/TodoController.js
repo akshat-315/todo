@@ -27,6 +27,27 @@ const createTodo = async (req, res, next) => {
   }
 };
 
+//Update a todo
+// const updateTodo = async (req, res, next) => {
+//   const { todoId } = req.params;
+//   const { title, content, status, isImportant } = req.body;
+
+//   try {
+//     const existingTodo = await Todo.findOne({ userId });
+//     if (!existingTodo) {
+//       res.status(400);
+//       throw new Error("Todo doesnt exist");
+//     }
+
+//     if (!title) {
+//       res.status(400);
+//       throw new Error("Kindly fill in the title");
+//     }
+
+//     const
+//   } catch (error) {}
+// };
+
 module.exports = {
   createTodo,
 };

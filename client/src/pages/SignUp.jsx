@@ -49,7 +49,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#2D2E2D] py-4 ">
+    <div className="flex h-screen bg-[#2D2E2D] py-4  justify-center items-center">
       <div className="hidden lg:flex items-center justify-center flex-1 bg-[#2D2E2D] text-black">
         <div className="max-w-md text-center">
           <svg
@@ -281,8 +281,11 @@ const SignUp = () => {
           </svg>
         </div>
       </div>
-      <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center rounded-3xl">
-        <div className="max-w-md w-full p-6">
+      <div
+        className="w-2/3 h-2/3  bg-gray-100 lg:w-1/2 lg:h-4/5
+      lg:mr-10 flex items-center justify-center rounded-3xl mb-20"
+      >
+        <div className="max-w-md w-full p-4">
           <h1 className="text-3xl font-semibold mb-6 text-black text-center">
             Sign Up
           </h1>
@@ -347,8 +350,11 @@ const SignUp = () => {
           <div className="mt-4 text-sm text-gray-600 text-center">
             <p className="text-base">
               Already have an account?{" "}
-              <a href="/sign-in" className="text-black hover:underline">
-                Login here
+              <a
+                href="/sign-in"
+                className="text-blue-600 hover:underline no-underline"
+              >
+                Sign-In here
               </a>
             </p>
           </div>

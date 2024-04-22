@@ -17,7 +17,7 @@ const Navbar = () => {
         </Link>
         <div className="sm:gap-6 flex gap-8">
           {!isSignInPage && (
-            <Link to="sign-in">
+            <Link to="/sign-in">
               <button className="bg-transparent border-none text-white rounded-md py-1 cursor-pointer">
                 <div className="px-4 py-1 text-lg text-gray-100">Sign In</div>
               </button>

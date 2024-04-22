@@ -6,7 +6,7 @@ import linkedin from "../assets/linkedIn.png";
 
 const Footer = () => {
   return (
-    <div className="bg-[#c8c8c8] px-6 py-16 max-h-fit">
+    <div className="bg-[#c8c8c8] px-6 py-4 max-h-fit">
       <div className="flex flex-col justify-center items-center gap-12">
         <div className="flex gap-2 w-1/4 px-40 justify-center">
           <img src={icon} width={28} height={30} />

@@ -86,25 +86,38 @@ const signIn = async (req, res, next) => {
   }
 };
 
-const getUser = async (req, res, next) => {
-  const { email } = req.body;
+// const getUser = async (req, res, next) => {
+//   const { email } = req.body;
 
+//   try {
+//     const user = await User.find({ email });
+//     if (!user) {
+//       res.json(500).json({ success: "false", message: "Invalid user" });
+//       return;
+//     }
+
+//     res.status(200).json({
+//       user,
+//       success: "true",
+//       message: "User found",
+//     });
+//   } catch (error) {}
+// };
+
+//SignOut
+const signOut = async (req, res, next) => {
   try {
-    const user = await User.find({ email });
-    if (!user) {
-      res.json(500).json({ success: "false", message: "Invalid user" });
-      return;
-    }
-
-    res.status(200).json({
-      user,
-      success: "true",
-      message: "User found",
+    res.clearCookie("access_token").status(200).json({
+      status: "success",
+      message: "Sign-out success",
     });
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
   signUp,
   signIn,
+  signOut,
 };

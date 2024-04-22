@@ -12,13 +12,16 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
     console.log("User logged in:", userData);
-
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
     // console.log("User logged out");
+  };
+
+  const isAuthenticated = () => {
+    return !!user; // Returns true if user is not null or undefined
   };
 
   useEffect(() => {
@@ -30,10 +33,11 @@ export const AuthProvider = ({ children }) => {
       //   JSON.parse(storedUser)
       // );
     }
+    isAuthenticated();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

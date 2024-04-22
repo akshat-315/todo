@@ -21,7 +21,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAuthenticated = () => {
-    return !!user; // Returns true if user is not null or undefined
+    if (localStorage.getItem("user")) {
+      return true;
+    } else return false;
   };
 
   useEffect(() => {
@@ -33,7 +35,6 @@ export const AuthProvider = ({ children }) => {
       //   JSON.parse(storedUser)
       // );
     }
-    isAuthenticated();
   }, []);
 
   return (

@@ -1,4 +1,5 @@
-import image from "../assets/Image.png"
+import image from "../assets/Image.png";
+import gif from "../assets/gif.gif";
 
 const Home = () => {
   return (
@@ -14,7 +15,7 @@ const Home = () => {
         </div>
         <div className="w-1/2">
           <div>
-            <img src={image} width={200} height={200}/>
+            <img src={gif} width={200} height={200} />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, Spinner } from "flowbite-react";
+import tick from "../assets/tick.gif";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -351,6 +352,9 @@ const SignUp = () => {
               </a>
             </p>
           </div>
+        </div>
+        <div className="">
+          <img src={tick} className="mt-52" width={26} />
         </div>
       </div>
     </div>

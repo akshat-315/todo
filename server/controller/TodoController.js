@@ -2,9 +2,14 @@ const Todo = require("../model/Todo");
 
 //Create a todo
 const createTodo = async (req, res, next) => {
-  const { title, content } = req.body;
+  const { title, content, isImportant, userId } = req.body;
 
   try {
+    if (!userId) {
+      res.status(400);
+      throw new Error("you are not authorized to create a new task");
+    }
+
     if (!title) {
       res.status(400);
       throw new Error("Please give a title to your task");
@@ -13,6 +18,8 @@ const createTodo = async (req, res, next) => {
     const newTodo = new Todo({
       title,
       content,
+      isImportant,
+      userId,
     });
 
     const savedTodo = await newTodo.save();

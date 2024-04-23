@@ -6,40 +6,39 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    console.log("User logged in:", userData);
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    // console.log("User logged out");
-  };
-
-  const isAuthenticated = () => {
-    if (localStorage.getItem("user")) {
-      return true;
-    } else return false;
+  const checkAuthUser = (userData) => {
+    if (userData) {
+      const newUser = {
+        userId: userData.userId,
+        email: userData.email,
+      };
+      setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
+      setIsAuthenticated(true);
+    } else {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    }
+    setLoading(false); // Set loading to false after user data is set
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      // console.log(
-      //   "User data loaded from localStorage:",
-      //   JSON.parse(storedUser)
-      // );
-    }
+    checkAuthUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
-      {children}
+    <AuthContext.Provider value={{ user, checkAuthUser, isAuthenticated }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

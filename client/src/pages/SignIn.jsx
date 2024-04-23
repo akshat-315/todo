@@ -12,7 +12,7 @@ const SignIn = () => {
   const [formData, setFormData] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { checkAuthUser } = useAuth();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -45,11 +45,10 @@ const SignIn = () => {
       const user = {
         userId: data._id,
         email: data.email,
-        username: data.username,
       };
       // console.log("User:", user);
       if (res.ok) {
-        login(user);
+        checkAuthUser(user);
         navigate("/home");
       }
     } catch (error) {

@@ -24,7 +24,11 @@ const createTodo = async (req, res, next) => {
 
     const savedTodo = await newTodo.save();
     if (savedTodo) {
-      res.status(200).json("New Todo created!");
+      res.status(200).json({
+        savedTodo,
+        message: "Todo created",
+        status: "success",
+      });
     } else {
       res.status(400);
       throw new Error("An error occurred while creating a todo");
@@ -50,6 +54,7 @@ const getTodos = async (req, res, next) => {
       res.status(200).json({
         allTodos,
         message: "All todos fetched successfully",
+        status: "success",
       });
     } else {
       res.status(400);
@@ -60,7 +65,39 @@ const getTodos = async (req, res, next) => {
   }
 };
 
+//update a todo
+const updateTodo = async (req, res, next) => {
+  const { todoId } = req.body;
+
+  if (!todoId) {
+    res.status(400);
+    throw new Error("Cannot update todo");
+  }
+
+  try {
+    const savedTodo = await Todo.findByIdAndUpdate(
+      todoId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          isImportant: req.body.isImportant,
+          status: req.body.status,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      savedTodo,
+      message: "Todo updated",
+      status: "success",
+    });
+  } catch (error) {}
+};
+
 module.exports = {
   createTodo,
   getTodos,
+  updateTodo,
 };

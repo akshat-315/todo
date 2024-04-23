@@ -1,18 +1,20 @@
 const Todo = require("../model/Todo");
 
-//Create a todo
+// Create a todo
 const createTodo = async (req, res, next) => {
   const { title, content, isImportant, userId } = req.body;
 
   try {
     if (!userId) {
-      res.status(400);
-      throw new Error("you are not authorized to create a new task");
+      return res
+        .status(400)
+        .json({ message: "You are not authorized to create a new task" });
     }
 
     if (!title) {
-      res.status(400);
-      throw new Error("Please give a title to your task");
+      return res
+        .status(400)
+        .json({ message: "Please give a title to your task" });
     }
 
     const newTodo = new Todo({
@@ -23,81 +25,94 @@ const createTodo = async (req, res, next) => {
     });
 
     const savedTodo = await newTodo.save();
-    if (savedTodo) {
-      res.status(200).json({
-        savedTodo,
-        message: "Todo created",
-        status: "success",
-      });
-    } else {
-      res.status(400);
-      throw new Error("An error occurred while creating a todo");
-    }
+    res.status(201).json({
+      savedTodo,
+      message: "Todo created",
+      status: "success",
+    });
   } catch (error) {
     next(error);
   }
 };
 
-//Get all todos
+// Get all todos
 const getTodos = async (req, res, next) => {
   const { userId } = req.params;
 
-  if (!userId) {
-    res.status(400);
-    throw new Error("You are not signend in");
-  }
-
   try {
-    const allTodos = await Todo.find({ userId: userId });
-
-    if (allTodos) {
-      res.status(200).json({
-        allTodos,
-        message: "All todos fetched successfully",
-        status: "success",
-      });
-    } else {
-      res.status(400);
-      throw new Error("Some error occurred while fetching the tasks");
+    if (!userId) {
+      return res.status(400).json({ message: "You are not signed in" });
     }
+
+    const allTodos = await Todo.find({ userId });
+
+    res.status(200).json({
+      allTodos,
+      message: "All todos fetched successfully",
+      status: "success",
+    });
   } catch (error) {
     next(error);
   }
 };
 
-//update a todo
+// Update a todo
 const updateTodo = async (req, res, next) => {
-  const { todoId } = req.body;
-
-  if (!todoId) {
-    res.status(400);
-    throw new Error("Cannot update todo");
-  }
+  const { todoId } = req.params;
 
   try {
-    const savedTodo = await Todo.findByIdAndUpdate(
+    if (!todoId) {
+      return res.status(400).json({ message: "Todo ID is required" });
+    }
+
+    const updatedTodo = await Todo.findByIdAndUpdate(
       todoId,
       {
-        $set: {
-          title: req.body.title,
-          content: req.body.content,
-          isImportant: req.body.isImportant,
-          status: req.body.status,
-        },
+        $set: req.body, // Update all fields in the request body
       },
       { new: true }
     );
 
+    if (!updatedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
     res.status(200).json({
-      savedTodo,
+      updatedTodo,
       message: "Todo updated",
       status: "success",
     });
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Delete a todo
+const deleteTodo = async (req, res, next) => {
+  const { todoId } = req.params;
+
+  try {
+    if (!todoId) {
+      return res.status(400).json({ message: "Todo ID is required" });
+    }
+
+    const deletedTodo = await Todo.findByIdAndDelete(todoId);
+    if (!deletedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    res.status(200).json({
+      message: "Todo deleted",
+      status: "success",
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
   createTodo,
   getTodos,
   updateTodo,
+  deleteTodo,
 };

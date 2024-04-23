@@ -34,27 +34,33 @@ const createTodo = async (req, res, next) => {
   }
 };
 
-//Update a todo
-// const updateTodo = async (req, res, next) => {
-//   const { todoId } = req.params;
-//   const { title, content, status, isImportant } = req.body;
+//Get all todos
+const getTodos = async (req, res, next) => {
+  const { userId } = req.params;
 
-//   try {
-//     const existingTodo = await Todo.findOne({ userId });
-//     if (!existingTodo) {
-//       res.status(400);
-//       throw new Error("Todo doesnt exist");
-//     }
+  if (!userId) {
+    res.status(400);
+    throw new Error("You are not signend in");
+  }
 
-//     if (!title) {
-//       res.status(400);
-//       throw new Error("Kindly fill in the title");
-//     }
+  try {
+    const allTodos = await Todo.find({ userId: userId });
 
-//     const
-//   } catch (error) {}
-// };
+    if (allTodos) {
+      res.status(200).json({
+        allTodos,
+        message: "All todos fetched successfully",
+      });
+    } else {
+      res.status(400);
+      throw new Error("Some error occurred while fetching the tasks");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   createTodo,
+  getTodos,
 };

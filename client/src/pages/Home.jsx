@@ -7,6 +7,7 @@ import { TbUrgent } from "react-icons/tb";
 import { ImCross } from "react-icons/im";
 import { MdOutlineDoneOutline } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
+import Sidebar from "../components/Sidebar";
 
 const Home = () => {
   const [formData, setFormData] = useState({});
@@ -200,10 +201,9 @@ const Home = () => {
   console.log(todos);
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <div className="bg-gray-100 w-1/3">
-        <h1>Sidebar</h1>
+    <div className="flex min-h-screen bg-[#2D2E2D]">
+      <div className="bg-gray-200 w-1/3 rounded-3xl">
+        <Sidebar />
       </div>
 
       {/* Main Content */}
@@ -211,13 +211,13 @@ const Home = () => {
         <div className="w-2/3">
           {/* Form */}
           <form onSubmit={handleFormSubmit}>
-            <div className="bg-gray-100 rounded-xl h-32 flex flex-col gap-4 mt-20 p-4">
+            <div className="bg-gray-200 rounded-xl h-32 flex flex-col gap-4 mt-20 p-4">
               <div className="h-full w-full rounded-xl ">
                 <div className="flex flex-col h-full justify-center">
                   <input
                     placeholder="task"
                     type="text"
-                    className="h-10 border-transparent rounded-xl placeholder-black text-base outline-none bg-gray-100"
+                    className="h-10 border-transparent rounded-xl placeholder-black text-base outline-none bg-gray-200"
                     id="title"
                     name="title"
                     onChange={handleChange}
@@ -225,7 +225,7 @@ const Home = () => {
                   <input
                     placeholder="content"
                     type="text"
-                    className="h-1/2 border-transparent rounded-xl outline-none bg-gray-100"
+                    className="h-1/2 border-transparent rounded-xl outline-none bg-gray-200"
                     id="content"
                     name="content"
                     onChange={handleChange}
@@ -234,7 +234,7 @@ const Home = () => {
               </div>
               {/* Add Task Button */}
               <div className="border-t" />
-              <div className="flex justify-end bg-gray-100 rounded-xl">
+              <div className="flex justify-end bg-gray-200 rounded-xl">
                 <div>
                   <Button
                     className="bg-[#de483a] border-none text-white rounded-lg py-1 px-1 mr-4 mb-1 cursor-pointer outline-none"
@@ -253,7 +253,7 @@ const Home = () => {
             {todos.map((todo) => (
               <div key={todo._id}>
                 <div
-                  className={`bg-gray-100 mt-6 rounded-lg p-3 flex flex-col gap-4 ${
+                  className={`bg-gray-200 mt-6 rounded-lg p-3 flex flex-col gap-4 ${
                     todo.status === "completed" ? "opacity-40 line-through" : ""
                   }`}
                 >
@@ -263,7 +263,7 @@ const Home = () => {
                         <input
                           placeholder={todo.title}
                           type="text"
-                          className="h-10 border-transparent rounded-xl placeholder-slate-900 text-base outline-none w-full "
+                          className="h-10 border-transparent rounded-xl placeholder-slate-900 text-base outline-none w-full bg-gray-200 "
                           id="title"
                           name="title"
                           onChange={handleEditChange}
@@ -285,7 +285,7 @@ const Home = () => {
                       <input
                         placeholder={todo.content}
                         type="text"
-                        className="h-1/2 border-transparent rounded-xl outline-none w-full"
+                        className="h-1/2 border-transparent rounded-xl outline-none w-full bg-gray-200"
                         id="content"
                         name="content"
                         onChange={handleEditChange}

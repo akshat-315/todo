@@ -37,7 +37,7 @@ const SignIn = () => {
       });
 
       const data = await res.json();
-      if (data.success === false) {
+      if (data.status === false) {
         setErrorMessage(data.message);
       }
       setLoading(false);

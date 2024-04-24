@@ -20,12 +20,10 @@ const createTodo = async (req, res, next) => {
     const existingTodo = await Todo.findOne({ title });
 
     if (existingTodo) {
-      return res
-        .status(400)
-        .json({
-          message: "A todo with this title already exists",
-          success: "false",
-        });
+      return res.status(400).json({
+        message: "A todo with this title already exists",
+        success: "false",
+      });
     }
 
     const newTodo = new Todo({
@@ -69,6 +67,7 @@ const getTodos = async (req, res, next) => {
 // Update a todo
 const updateTodo = async (req, res, next) => {
   const { todoId } = req.params;
+  const { title, content } = req.body;
 
   try {
     if (!todoId) {
@@ -78,7 +77,10 @@ const updateTodo = async (req, res, next) => {
     const updatedTodo = await Todo.findByIdAndUpdate(
       todoId,
       {
-        $set: req.body, // Update all fields in the request body
+        $set: {
+          title: title,
+          content: content,
+        },
       },
       { new: true }
     );
@@ -90,7 +92,6 @@ const updateTodo = async (req, res, next) => {
     res.status(200).json({
       updatedTodo,
       message: "Todo updated",
-      status: "success",
     });
   } catch (error) {
     next(error);

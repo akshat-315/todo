@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "flowbite-react";
 import { useAuth } from "../context/AuthContext";
+import { CiEdit } from "react-icons/ci";
+import { IoMdDoneAll } from "react-icons/io";
+import { TbUrgent } from "react-icons/tb";
+import { ImCross } from "react-icons/im";
+import { MdOutlineDoneOutline } from "react-icons/md";
 
 const Home = () => {
   const [formData, setFormData] = useState({});
+  const [updateData, setUpdateData] = useState({});
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState("");
+  const [isEditingId, setIsEditingId] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -23,6 +30,35 @@ const Home = () => {
     getAllTodos();
   }, [user.userId]);
 
+  const handleFormUpdate = async (todoId) => {
+    // e.preventDefault();
+    console.log(todoId);
+
+    try {
+      const res = await fetch(`/api/todo/update-todo/${todoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...updateData }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.success === "false") {
+        setError(data.message);
+      } else {
+        const updatedTodoIndex = todos.findIndex((todo) => todo._id === todoId);
+        const updatedTodo = { ...todos[updatedTodoIndex], ...updateData };
+        const updatedTodos = [...todos];
+        updatedTodos[updatedTodoIndex] = updatedTodo;
+        setTodos(updatedTodos);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,7 +72,7 @@ const Home = () => {
       });
 
       const data = await res.json();
-      console.log(data)
+      console.log(data);
       if (data.success === "false") {
         setError(data.message);
       } else {
@@ -52,9 +88,21 @@ const Home = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  console.log(formData);
+  const handleEditChange = (e) => {
+    setUpdateData({ ...updateData, [e.target.id]: e.target.value });
+  };
+
+  // console.log(formData);
+  console.log(updateData);
   // console.log(user.userId);
   // console.log(todos.content);
+
+  const handleEditIcon = (todoId) => {
+    console.log("This", todoId);
+    if (isEditingId === todoId) {
+      setIsEditingId(null);
+    } else setIsEditingId(todoId);
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -68,13 +116,13 @@ const Home = () => {
         <div className="w-2/3">
           {/* Form */}
           <form onSubmit={handleFormSubmit}>
-            <div className="bg-white rounded-xl h-32 flex flex-col gap-4 mt-20">
-              <div className="h-full w-full bg-white rounded-xl">
+            <div className="bg-white rounded-xl h-32 flex flex-col gap-4 mt-20 p-4">
+              <div className="h-full w-full bg-white rounded-xl ">
                 <div className="flex flex-col h-full justify-center">
                   <input
                     placeholder="task"
                     type="text"
-                    className="h-10 border-transparent rounded-xl placeholder-slate-900 text-base outline-none"
+                    className="h-10 border-transparent rounded-xl placeholder-black text-base outline-none"
                     id="title"
                     name="title"
                     onChange={handleChange}
@@ -82,7 +130,7 @@ const Home = () => {
                   <input
                     placeholder="content"
                     type="text"
-                    className="h-1/2 border-transparent rounded-xl outline-none"
+                    className="h-1/2 border-transparent rounded-xl outline-none "
                     id="content"
                     name="content"
                     onChange={handleChange}
@@ -110,11 +158,55 @@ const Home = () => {
             {todos.map((todo) => (
               <div key={todo._id}>
                 <div className="bg-white mt-6 rounded-lg p-3 flex flex-col gap-2">
-                  <div className="flex justify-between">
-                    <div>{todo.title}</div>
-                    <div>{/* Render icons here */}</div>
-                  </div>
-                  <div className="opacity-60">{todo.content}</div>
+                  {isEditingId === todo._id ? (
+                    <>
+                      <div className="flex justify-between items-center -mt-2">
+                        <input
+                          placeholder={todo.title}
+                          type="text"
+                          className="h-10 border-transparent rounded-xl placeholder-slate-900 text-base outline-none"
+                          id="title"
+                          name="title"
+                          onChange={handleEditChange}
+                        />
+                        <div>
+                          <ImCross
+                            className="mr-2 text-sm"
+                            onClick={() => handleEditIcon(todo._id)}
+                          />
+                          <MdOutlineDoneOutline
+                            onClick={() => {
+                              handleFormUpdate(todo._id);
+                              setIsEditingId(null);
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <input
+                        placeholder={todo.content}
+                        type="text"
+                        className="h-1/2 border-transparent rounded-xl outline-none"
+                        id="content"
+                        name="content"
+                        onChange={handleEditChange}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex justify-between">
+                        <div>{todo.title}</div>
+                        <div className="flex gap-3">
+                          <TbUrgent className="text-lg cursor-pointer" />
+                          <CiEdit
+                            className="text-lg cursor-pointer"
+                            onClick={() => handleEditIcon(todo._id)}
+                          />
+                          <IoMdDoneAll className="text-lg cursor-pointer" />
+                        </div>
+                      </div>
+                      <div className="opacity-60">{todo.content}</div>
+                    </>
+                  )}
                 </div>
               </div>
             ))}

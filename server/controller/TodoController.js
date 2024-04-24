@@ -2,7 +2,7 @@ const Todo = require("../model/Todo");
 
 // Create a todo
 const createTodo = async (req, res, next) => {
-  const { title, content, isImportant, userId } = req.body;
+  const { title, content, userId } = req.body;
 
   try {
     if (!userId) {
@@ -15,6 +15,17 @@ const createTodo = async (req, res, next) => {
       return res
         .status(400)
         .json({ message: "Please give a title to your task" });
+    }
+
+    const existingTodo = await Todo.findOne({ title });
+
+    if (existingTodo) {
+      return res
+        .status(400)
+        .json({
+          message: "A todo with this title already exists",
+          success: "false",
+        });
     }
 
     const newTodo = new Todo({

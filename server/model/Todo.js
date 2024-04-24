@@ -11,6 +11,9 @@ const todoSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    content: {
+      type: String,
+    },
     status: {
       type: String,
       required: true,

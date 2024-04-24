@@ -13,7 +13,9 @@ const Home = () => {
       try {
         const res = await fetch(`/api/todo/get-todos/${user.userId}`);
         const data = await res.json();
-        setTodos(data);
+        if (data.status === "success") {
+          setTodos(data.allTodos);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -32,14 +34,17 @@ const Home = () => {
         },
         body: JSON.stringify({ ...formData, userId: user.userId }),
       });
-      if (!res.ok) {
-        throw new Error("Failed to create todo");
-      }
 
-      const newTodo = await res.json();
-      setTodos([...todos, newTodo]);
+      const data = await res.json();
+      console.log(data)
+      if (data.success === "false") {
+        setError(data.message);
+      } else {
+        const newTodo = data.savedTodo;
+        setTodos([...todos, newTodo]);
+      }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
@@ -49,7 +54,7 @@ const Home = () => {
 
   console.log(formData);
   // console.log(user.userId);
-  console.log(user.userId);
+  // console.log(todos.content);
 
   return (
     <div className="flex min-h-screen">
@@ -68,6 +73,7 @@ const Home = () => {
                 <div className="flex flex-col h-full justify-center">
                   <input
                     placeholder="task"
+                    type="text"
                     className="h-10 border-transparent rounded-xl placeholder-slate-900 text-base outline-none"
                     id="title"
                     name="title"
@@ -75,20 +81,14 @@ const Home = () => {
                   />
                   <input
                     placeholder="content"
+                    type="text"
                     className="h-1/2 border-transparent rounded-xl outline-none"
                     id="content"
                     name="content"
-                    value={formData.content}
                     onChange={handleChange}
                   />
                 </div>
               </div>
-
-              {/* Error message */}
-              {error && (
-                <div className="text-red-500 text-sm text-center">{error}</div>
-              )}
-
               {/* Add Task Button */}
               <div className="border-t" />
               <div className="flex justify-end bg-white rounded-xl">
@@ -105,8 +105,19 @@ const Home = () => {
           </form>
 
           {/* Display Todos */}
-          <div className="bg-white mt-20 rounded-lg p-3 flex flex-col gap-2">
-            {/* Display todos here */}
+
+          <div className="mt-20">
+            {todos.map((todo) => (
+              <div key={todo._id}>
+                <div className="bg-white mt-6 rounded-lg p-3 flex flex-col gap-2">
+                  <div className="flex justify-between">
+                    <div>{todo.title}</div>
+                    <div>{/* Render icons here */}</div>
+                  </div>
+                  <div className="opacity-60">{todo.content}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

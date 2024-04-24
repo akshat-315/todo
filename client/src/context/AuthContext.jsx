@@ -29,7 +29,14 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
       }
     }
-    setLoading(false); // Set loading to false after user data is set
+    setLoading(false);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    setIsAuthenticated(false);
+    navigate("/sign-in");
   };
 
   useEffect(() => {
@@ -37,7 +44,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, checkAuthUser, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ user, checkAuthUser, isAuthenticated, logout }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

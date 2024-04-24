@@ -20,7 +20,6 @@ const createTodo = async (req, res, next) => {
     const newTodo = new Todo({
       title,
       content,
-      isImportant,
       userId,
     });
 

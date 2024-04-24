@@ -13,6 +13,8 @@ const Home = () => {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState("");
   const [isEditingId, setIsEditingId] = useState(null);
+  const [isImportant, setIsImportant] = useState(false);
+  const [status, setStatus] = useState(true);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -93,7 +95,7 @@ const Home = () => {
   };
 
   // console.log(formData);
-  console.log(updateData);
+  // console.log(updateData);
   // console.log(user.userId);
   // console.log(todos.content);
 
@@ -103,6 +105,75 @@ const Home = () => {
       setIsEditingId(null);
     } else setIsEditingId(todoId);
   };
+
+  const handleToggleUrgent = async (todoId, isUrgent) => {
+    try {
+      const updatedData = { isImportant: !isUrgent };
+      const res = await fetch(`/api/todo/update-important/${todoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.success === "false") {
+        setError(data.message);
+      } else {
+        const updatedTodoIndex = todos.findIndex((todo) => todo._id === todoId);
+        const updatedTodo = {
+          ...todos[updatedTodoIndex],
+          important: !isUrgent,
+        };
+        const updatedTodos = [...todos];
+        updatedTodos[updatedTodoIndex] = updatedTodo;
+        setTodos(updatedTodos);
+      }
+    } catch (error) {
+      console.error("Error toggling urgent status:", error);
+    }
+  };
+
+  const handleStatus = async (todoId, currentStatus) => {
+    try {
+      const newStatus = currentStatus === "completed" ? "active" : "completed"; // Toggle the status
+      const updatedData = { status: newStatus };
+      const res = await fetch(`/api/todo/update-status/${todoId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      const data = await res.json();
+      console.log(data);
+      if (data.success === "false") {
+        setError(data.message);
+      } else {
+        const updatedTodoIndex = todos.findIndex((todo) => todo._id === todoId);
+        const updatedTodo = {
+          ...todos[updatedTodoIndex],
+          status: newStatus,
+        };
+        const updatedTodos = [...todos];
+        updatedTodos[updatedTodoIndex] = updatedTodo;
+        setTodos(updatedTodos);
+      }
+    } catch (error) {
+      console.error("Error toggling todo status:", error);
+    }
+  };
+
+  const handleImportant = () => {
+    if (!isImportant) {
+      setIsImportant(true);
+    } else setIsImportant(false);
+  };
+
+  console.log(todos);
 
   return (
     <div className="flex min-h-screen">
@@ -164,12 +235,12 @@ const Home = () => {
                         <input
                           placeholder={todo.title}
                           type="text"
-                          className="h-10 border-transparent rounded-xl placeholder-slate-900 text-base outline-none"
+                          className="h-10 border-transparent rounded-xl placeholder-slate-900 text-base outline-none w-full "
                           id="title"
                           name="title"
                           onChange={handleEditChange}
                         />
-                        <div>
+                        <div className="flex">
                           <ImCross
                             className="mr-2 text-sm"
                             onClick={() => handleEditIcon(todo._id)}
@@ -185,7 +256,7 @@ const Home = () => {
                       <input
                         placeholder={todo.content}
                         type="text"
-                        className="h-1/2 border-transparent rounded-xl outline-none"
+                        className="h-1/2 border-transparent rounded-xl outline-none w-full"
                         id="content"
                         name="content"
                         onChange={handleEditChange}
@@ -196,12 +267,23 @@ const Home = () => {
                       <div className="flex justify-between">
                         <div>{todo.title}</div>
                         <div className="flex gap-3">
-                          <TbUrgent className="text-lg cursor-pointer" />
+                          <TbUrgent
+                            onClick={() => {
+                              handleImportant(),
+                                handleToggleUrgent(todo._id, isImportant);
+                            }}
+                            className={`${
+                              todo.important ? "text-red-600" : "text-gray-900"
+                            } cursor-pointer text-lg`}
+                          />
                           <CiEdit
                             className="text-lg cursor-pointer"
                             onClick={() => handleEditIcon(todo._id)}
                           />
-                          <IoMdDoneAll className="text-lg cursor-pointer" />
+                          <IoMdDoneAll
+                            className="text-lg cursor-pointer"
+                            onClick={() => handleStatus(todo._id, todo.status)}
+                          />
                         </div>
                       </div>
                       <div className="opacity-60">{todo.content}</div>

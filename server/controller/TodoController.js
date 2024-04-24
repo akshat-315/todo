@@ -98,6 +98,69 @@ const updateTodo = async (req, res, next) => {
   }
 };
 
+const markAsImportant = async (req, res, next) => {
+  const { todoId } = req.params;
+  const { isImportant } = req.body;
+
+  try {
+    if (!todoId) {
+      return res.status(400).json({ message: "Todo ID is required" });
+    }
+
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      todoId,
+      {
+        $set: {
+          isImportant: isImportant,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    res.status(200).json({
+      updatedTodo,
+      message: "Todo updated",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const setStatus = async (req, res, next) => {
+  const { todoId } = req.params;
+  const { status } = req.body;
+
+  try {
+    if (!todoId) {
+      return res.status(400).json({ message: "Todo ID is required" });
+    }
+
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      todoId,
+      {
+        $set: {
+          status: status,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedTodo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    res.status(200).json({
+      updatedTodo,
+      message: "Todo updated",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Delete a todo
 const deleteTodo = async (req, res, next) => {
   const { todoId } = req.params;
@@ -126,4 +189,6 @@ module.exports = {
   getTodos,
   updateTodo,
   deleteTodo,
+  markAsImportant,
+  setStatus
 };

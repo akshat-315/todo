@@ -6,6 +6,7 @@ import { IoMdDoneAll } from "react-icons/io";
 import { TbUrgent } from "react-icons/tb";
 import { ImCross } from "react-icons/im";
 import { MdOutlineDoneOutline } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 
 const Home = () => {
   const [formData, setFormData] = useState({});
@@ -173,12 +174,35 @@ const Home = () => {
     } else setIsImportant(false);
   };
 
+  const handleDelete = async (todoId) => {
+    try {
+      const res = await fetch(`/api/todo/delete-todo/${todoId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        setError("Could not delete the task");
+      }
+
+      const data = await res.json();
+      if (data.success === "false") {
+        setError(data.message);
+      } else {
+        setTodos((prevTodos) =>
+          prevTodos.filter((todo) => todo._id !== todoId)
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   console.log(todos);
 
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <div className="bg-[#606260] w-1/3">
+      <div className="bg-gray-100 w-1/3">
         <h1>Sidebar</h1>
       </div>
 
@@ -187,13 +211,13 @@ const Home = () => {
         <div className="w-2/3">
           {/* Form */}
           <form onSubmit={handleFormSubmit}>
-            <div className="bg-white rounded-xl h-32 flex flex-col gap-4 mt-20 p-4">
-              <div className="h-full w-full bg-white rounded-xl ">
+            <div className="bg-gray-100 rounded-xl h-32 flex flex-col gap-4 mt-20 p-4">
+              <div className="h-full w-full rounded-xl ">
                 <div className="flex flex-col h-full justify-center">
                   <input
                     placeholder="task"
                     type="text"
-                    className="h-10 border-transparent rounded-xl placeholder-black text-base outline-none"
+                    className="h-10 border-transparent rounded-xl placeholder-black text-base outline-none bg-gray-100"
                     id="title"
                     name="title"
                     onChange={handleChange}
@@ -201,7 +225,7 @@ const Home = () => {
                   <input
                     placeholder="content"
                     type="text"
-                    className="h-1/2 border-transparent rounded-xl outline-none "
+                    className="h-1/2 border-transparent rounded-xl outline-none bg-gray-100"
                     id="content"
                     name="content"
                     onChange={handleChange}
@@ -210,7 +234,7 @@ const Home = () => {
               </div>
               {/* Add Task Button */}
               <div className="border-t" />
-              <div className="flex justify-end bg-white rounded-xl">
+              <div className="flex justify-end bg-gray-100 rounded-xl">
                 <div>
                   <Button
                     className="bg-[#de483a] border-none text-white rounded-lg py-1 px-1 mr-4 mb-1 cursor-pointer outline-none"
@@ -228,7 +252,11 @@ const Home = () => {
           <div className="mt-20">
             {todos.map((todo) => (
               <div key={todo._id}>
-                <div className="bg-white mt-6 rounded-lg p-3 flex flex-col gap-2">
+                <div
+                  className={`bg-gray-100 mt-6 rounded-lg p-3 flex flex-col gap-4 ${
+                    todo.status === "completed" ? "opacity-40 line-through" : ""
+                  }`}
+                >
                   {isEditingId === todo._id ? (
                     <>
                       <div className="flex justify-between items-center -mt-2">
@@ -240,9 +268,9 @@ const Home = () => {
                           name="title"
                           onChange={handleEditChange}
                         />
-                        <div className="flex">
+                        <div className="flex items-center">
                           <ImCross
-                            className="mr-2 text-sm"
+                            className="mr-2 text-sm cursor-pointer"
                             onClick={() => handleEditIcon(todo._id)}
                           />
                           <MdOutlineDoneOutline
@@ -250,6 +278,7 @@ const Home = () => {
                               handleFormUpdate(todo._id);
                               setIsEditingId(null);
                             }}
+                            className="cursor-pointer text-lg"
                           />
                         </div>
                       </div>
@@ -275,18 +304,31 @@ const Home = () => {
                             className={`${
                               todo.important ? "text-red-600" : "text-gray-900"
                             } cursor-pointer text-lg`}
+                            title={
+                              todo.important
+                                ? "Remove from urgent"
+                                : "Mark as urgent"
+                            }
                           />
                           <CiEdit
                             className="text-lg cursor-pointer"
                             onClick={() => handleEditIcon(todo._id)}
+                            title="Edit your task"
                           />
                           <IoMdDoneAll
                             className="text-lg cursor-pointer"
                             onClick={() => handleStatus(todo._id, todo.status)}
+                            title="Assign task as completed?"
                           />
                         </div>
                       </div>
-                      <div className="opacity-60">{todo.content}</div>
+                      <div className="flex justify-between">
+                        <div className="opacity-60">{todo.content}</div>
+                        <MdDeleteOutline
+                          className="text-lg cursor-pointer"
+                          onClick={() => handleDelete(todo._id)}
+                        />
+                      </div>
                     </>
                   )}
                 </div>

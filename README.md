@@ -22,7 +22,7 @@ A task management app with a user friendly UI wherein a user can register and si
 
 ## Run Locally
 
--Backend (server)
+# Backend (server)
 
 Clone the project
 
@@ -42,7 +42,7 @@ Install dependencies
   npm install
 ```
 
-Create a .env file and give your own mongoDB Url and PORT number
+Create a .env file and give your own mongoDB Url, a PORT number and a JWT_SECRET key of your choice
 
 Start the server
 
@@ -50,7 +50,7 @@ Start the server
   npm run dev
 ```
 
--frontend (client)
+# frontend (client)
 
 Go to the project directory
 

@@ -6,6 +6,7 @@ const {
   deleteTodo,
   markAsImportant,
   setStatus,
+  fetchTodoStatus,
 } = require("../controller/TodoController");
 
 const todoRouter = express.Router();
@@ -16,5 +17,6 @@ todoRouter.put("/update-todo/:todoId", updateTodo);
 todoRouter.put("/update-important/:todoId", markAsImportant);
 todoRouter.put("/update-status/:todoId", setStatus);
 todoRouter.delete("/delete-todo/:todoId", deleteTodo);
+todoRouter.get("/fetch-todo/:userId", fetchTodoStatus);
 
 module.exports = todoRouter;

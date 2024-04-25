@@ -140,7 +140,7 @@ const Home = () => {
 
   const handleStatus = async (todoId, currentStatus) => {
     try {
-      const newStatus = currentStatus === "completed" ? "active" : "completed"; // Toggle the status
+      const newStatus = currentStatus === "completed" ? "active" : "completed";
       const updatedData = { status: newStatus };
       const res = await fetch(`/api/todo/update-status/${todoId}`, {
         method: "PUT",
@@ -202,8 +202,8 @@ const Home = () => {
 
   return (
     <div className="flex min-h-screen bg-[#2D2E2D]">
-      <div className="bg-gray-200 w-1/3 rounded-3xl">
-        <Sidebar />
+      <div className="bg-gray-200 w-1/3 rounded-r-3xl">
+        <Sidebar setTodos={setTodos} />
       </div>
 
       {/* Main Content */}
@@ -272,6 +272,7 @@ const Home = () => {
                           <ImCross
                             className="mr-2 text-sm cursor-pointer"
                             onClick={() => handleEditIcon(todo._id)}
+                            title="Go back"
                           />
                           <MdOutlineDoneOutline
                             onClick={() => {
@@ -279,6 +280,7 @@ const Home = () => {
                               setIsEditingId(null);
                             }}
                             className="cursor-pointer text-lg"
+                            title="Save changes"
                           />
                         </div>
                       </div>

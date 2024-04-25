@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { BiLogOut } from "react-icons/bi";
 
-const Sidebar = () => {
+const Sidebar = ({ setTodos }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -24,8 +24,40 @@ const Sidebar = () => {
     }
   };
 
+  const handleFilter = async (status) => {
+    try {
+      const res = await fetch(
+        `/api/todo/fetch-todo/${user.userId}?status=${status}`,
+        {
+          method: "GET",
+        }
+      );
+
+      const data = await res.json();
+      if (data.status === "fail") {
+        console.log(data.message);
+      } else {
+        setTodos(data.todos);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllTodos = async () => {
+    try {
+      const res = await fetch(`/api/todo/get-todos/${user.userId}`);
+      const data = await res.json();
+      if (data.status === "success") {
+        setTodos(data.allTodos);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="flex flex-col justify-between min-h-screen">
+    <div className="container mx-auto flex flex-col justify-between min-h-screen">
       <div>
         <div className="mt-20 p-10 flex justify-center items-center">
           <Link className="no-underline" to="/">
@@ -43,10 +75,38 @@ const Sidebar = () => {
           <div></div>
         </div>
       </div>
-      <div className="ml-96 mb-8">
+      <button
+        className="flex items-center  justify-center gap-4 -mt-96 border-none bg-gray-200 cursor-pointer hover:bg-gray-300 rounded-3xl mr-16"
+        onClick={getAllTodos}
+      >
+        <div className="inline-block rounded-full border-2 h-4 w-4 bg-yellow-400 border-none"></div>
+        <div>
+          <p className="text-lg">Show all tasks</p>
+        </div>
+      </button>
+      <button
+        className="flex items-center  justify-center gap-4 -mt-96 border-none bg-gray-200 cursor-pointer hover:bg-gray-300 rounded-3xl mr-8"
+        onClick={() => handleFilter("active")}
+      >
+        <div className="inline-block rounded-full border-2 h-4 w-4 bg-green-400 border-none"></div>
+        <div>
+          <p className="text-lg">Show active tasks</p>
+        </div>
+      </button>
+      <button
+        className="flex  items-center justify-center gap-4 -mt-96 border-none bg-gray-200 cursor-pointer hover:bg-gray-300 rounded-3xl"
+        onClick={() => handleFilter("completed")}
+      >
+        <div className="inline-block rounded-full border-2 h-4 w-4 bg-red-500 border-none"></div>
+        <div>
+          <p className="text-lg">Show completed tasks</p>
+        </div>
+      </button>
+      <div className="flex justify-end mr-6 mb-4">
         <button
           className="bg-[#de483a] border-none text-white rounded-xl p-2 cursor-pointer"
           onClick={handleSignout}
+          title="Sign Out?"
         >
           <div className="px-4 py-1 text-l">
             <BiLogOut className="text-3xl" />

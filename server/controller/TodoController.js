@@ -184,11 +184,43 @@ const deleteTodo = async (req, res, next) => {
   }
 };
 
+//Fetch a todo according to its status
+const fetchTodoStatus = async (req, res, next) => {
+  const { userId } = req.params;
+  const { status } = req.query;
+
+  if (!userId || !status) {
+    return res.status(400).json({
+      message: "Incomplete information in the req params",
+      status: "fail",
+    });
+  }
+
+  try {
+    const todos = await Todo.find({ userId, status });
+
+    if (!todos) {
+      return res.status(400).json({
+        message: "Some error occurred while fetching the todos with status",
+      });
+    }
+
+    res.status(200).json({
+      todos,
+      message: "Todos with status fetched successfully",
+      status: "success",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createTodo,
   getTodos,
   updateTodo,
   deleteTodo,
   markAsImportant,
-  setStatus
+  setStatus,
+  fetchTodoStatus,
 };

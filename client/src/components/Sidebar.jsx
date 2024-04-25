@@ -68,8 +68,8 @@ const Sidebar = ({ setTodos }) => {
           </Link>
         </div>
         <div className="flex justify-center items-center gap-4 mt-10 text-gray-600">
-          <CgProfile className="text-4xl" />
-          <h2>{user.email}</h2>
+          <CgProfile className="text-lg  md:text-4xl" />
+          <h2 className="text-sm md:text-lg">{user.email}</h2>
         </div>
         <div>
           <div></div>
@@ -81,7 +81,7 @@ const Sidebar = ({ setTodos }) => {
       >
         <div className="inline-block rounded-full border-2 h-4 w-4 bg-yellow-400 border-none"></div>
         <div>
-          <p className="text-lg">Show all tasks</p>
+          <p className="text-sm md:text-lg">Show all tasks</p>
         </div>
       </button>
       <button
@@ -90,7 +90,7 @@ const Sidebar = ({ setTodos }) => {
       >
         <div className="inline-block rounded-full border-2 h-4 w-4 bg-green-400 border-none"></div>
         <div>
-          <p className="text-lg">Show active tasks</p>
+          <p className="text-sm md:text-lg">Show active tasks</p>
         </div>
       </button>
       <button
@@ -99,7 +99,7 @@ const Sidebar = ({ setTodos }) => {
       >
         <div className="inline-block rounded-full border-2 h-4 w-4 bg-red-500 border-none"></div>
         <div>
-          <p className="text-lg">Show completed tasks</p>
+          <p className="text-sm md:text-lg">Show completed tasks</p>
         </div>
       </button>
       <div className="flex justify-end mr-6 mb-4">

@@ -255,7 +255,8 @@ const Home = () => {
                 <div
                   className={`bg-gray-200 mt-6 rounded-lg p-3 flex flex-col gap-4 ${
                     todo.status === "completed" ? "opacity-40 line-through" : ""
-                  }`}
+                  }
+                  ${todo.important ? "bg-red-300" : ""}`}
                 >
                   {isEditingId === todo._id ? (
                     <>

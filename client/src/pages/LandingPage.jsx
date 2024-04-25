@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 import image from "../assets/Image.png";
 import gif from "../assets/gif.gif";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { FaTasks } from "react-icons/fa";
 
 const LandingPage = () => {
   return (
@@ -18,6 +20,12 @@ const LandingPage = () => {
               Get started with the todo by clicking on the Sign In button.
             </h2>
             <h2>If you are new, get started by Registering your account!</h2>
+            <Link className="no-underline " to={"/home"}>
+              <div className="flex items-center justify-center gap-2 bg-[#de483a] w-1/4 rounded-2xl text-white p-3">
+                <FaTasks className="" />
+                <p className="">Start!</p>
+              </div>
+            </Link>
           </div>
           <div className="w-1/2">
             <div>

@@ -1,4 +1,4 @@
-# Task Management by Aqeeq Technologies
+# Task Management Web App
 
 A task management app with a user friendly UI wherein a user can register and sign-in with their email and password. Once verified, the user can the manage their tasks.
 

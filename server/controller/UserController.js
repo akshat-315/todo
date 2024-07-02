@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../model/User.js');
 
 //Creating a user via Sign-Up, takes in email, password and username of the new user and stores in the database
@@ -35,6 +35,7 @@ const signUp = async (req, res, next) => {
             password: hashedPassword
         });
 
+        console.log("BOdy: ", newUser)
         const savedUser = await newUser.save();
         
         if (savedUser) {
@@ -77,6 +78,7 @@ const signIn = async (req, res, next) => {
         
         //Generating token using jwt
         const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+        console.log("VALID: ", token)
 
         //set the token into cookie
         res.cookie('token', token, {

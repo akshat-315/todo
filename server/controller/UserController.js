@@ -36,6 +36,7 @@ const signUp = async (req, res, next) => {
         });
 
         const savedUser = await newUser.save();
+        
         if (savedUser) {
             res.status(200).json('Sign-up was successful');
         } else {
@@ -53,7 +54,6 @@ const signUp = async (req, res, next) => {
 //User Sign-In, takes the email and password of the registered user, verifies the password with the backend and returns a response
 const signIn = async (req, res, next) => {
     const { email, password } = req.body;
-
     try {
         //Checking if user if valid or not
         const validUser = await User.findOne({ email });
@@ -64,7 +64,7 @@ const signIn = async (req, res, next) => {
             });
             return;
         }
-
+        
         //Matching hashed the password from the database
         const isMatch = await bcrypt.compare(password, validUser.password);
         if (!isMatch) {
@@ -74,7 +74,7 @@ const signIn = async (req, res, next) => {
             });
             return;
         }
-
+        
         //Generating token using jwt
         const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
@@ -86,7 +86,7 @@ const signIn = async (req, res, next) => {
         console.log('Token: ', token);
 
         //the data that can pose a security threat, such as the user password is not sent back in the response object
-        res.status(200).json({
+        const response = res.status(200).json({
             status: 'success',
             message: 'Login success',
             _id: validUser?._id,

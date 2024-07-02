@@ -35,6 +35,7 @@ const SignUp = () => {
             });
 
             const data = await res.json();
+            console.log("DATA: ", formData)
             if (data.success === false) {
                 setErrorMessage(data.message);
             }

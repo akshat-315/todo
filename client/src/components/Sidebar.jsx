@@ -90,7 +90,7 @@ const Sidebar = ({ setTodos }) => {
             >
                 <div className="inline-block rounded-full border-2 h-4 w-4 bg-green-400 border-none"></div>
                 <div>
-                    <p className="text-sm md:text-lg">Show active tasks</p>
+                    <p className="text-sm md:text-lg">Show active tasks HIiiii</p>
                 </div>
             </button>
             <button

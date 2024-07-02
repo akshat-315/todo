@@ -28,16 +28,17 @@ const SignIn = () => {
         if (!formData.email || !formData.password) {
             return setErrorMessage('Please fill out all fields.');
         }
-
         try {
             setLoading(true);
             setErrorMessage(null);
+            console.log("FORM :", formData)
             const res = await fetch('/api/user/sign-in', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
-
+            
+            console.log("HI", res);
             const data = await res.json();
             if (data.status === false) {
                 setErrorMessage(data.message);
